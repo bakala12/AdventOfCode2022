@@ -34,4 +34,4 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
 ## Acknowledgments
 
-* Great thanks to [Adevent of Code](https://adventofcode.com/)
+* Great thanks to [Advent of Code](https://adventofcode.com/)
