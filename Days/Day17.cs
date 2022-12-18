@@ -1,21 +1,28 @@
 ﻿using AdventOfCode2022.Input;
+using AdventOfCode2022.Models;
 
 namespace AdventOfCode2022.Days
 {
-    public class Day17 : AocDay<string>
+    public class Day17 : AocDay<LeftRight[]>
     {
-        public Day17(IInputParser<string> inputParser) : base(inputParser)
+        public Day17(IInputParser<LeftRight[]> inputParser) : base(inputParser)
         {
         }
 
-        protected override void Part1(string input)
+        protected override void Part1(LeftRight[] input)
         {
-            Console.WriteLine(input);
+            var well = new List<bool[]>();
+
+            Console.WriteLine(well.Count);
         }
 
-        protected override void Part2(string input)
+        protected override void Part2(LeftRight[] input)
         {
-            Console.WriteLine(input);
         }
+
+        private List<List<bool[]>> Blocks = new List<List<bool[]>>()
+        {
+
+        };
     }
 }
