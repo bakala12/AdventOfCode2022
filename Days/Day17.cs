@@ -21,7 +21,64 @@ namespace AdventOfCode2022.Days
 
         protected override void Part2(LeftRight[] input)
         {
+            var well = new BlockWell();
+            var moves = new LazyQueue<LeftRight>(input);
+            List<(int index, int height)> positions = new();
+            while (true)
+            {
+                foreach (var block in BlocksCollection.GetBlocks())
+                {
+                    well.AddBlockAndMove(block, moves);
+                    if (block == BlocksCollection.Fifth)
+                    {
+                        positions.Add((moves.Index, well.GetWellHeight()));
+                        if (positions.Count < 1000)
+                            continue;
 
+                        (int position, int length) = FindLongestDuplicate(positions);
+                        int difference = positions[position + length].height - positions[position].height;
+                        int basePlaced = position * 5;
+                        int duplicatePlaced = length * 5;
+                        long repeats = (1000000000000L - basePlaced) / duplicatePlaced;
+                        int leftOver = (int)(1000000000000L - basePlaced - repeats * duplicatePlaced);
+                        int baseCount = positions[position + leftOver / 5 - 1].height;
+                        Console.WriteLine($"{baseCount + repeats * difference}");
+                        return;
+                    }
+                }
+            }
+
+        }
+
+        private (int index, int length) FindLongestDuplicate(List<(int index, int height)> positions)
+        {
+            int n = positions.Count;
+            int[,] data = new int[n + 1, n + 1];
+
+            int length = 0;
+            int index = 0;
+            for (int i = 1; i <= n; i++)
+            {
+                for (int j = i + 1; j <= n; j++)
+                {
+                    if (positions[i - 1].index == positions[j - 1].index && data[i - 1, j - 1] < (j - i))
+                    {
+                        data[i, j] = data[i - 1, j - 1] + 1;
+
+                        if (data[i, j] > length)
+                        {
+                            length = data[i, j];
+                            index = Math.Max(i, index);
+                        }
+                    }
+                    else
+                    {
+                        data[i, j] = 0;
+                    }
+                }
+            }
+
+            return (length > 0 ? index - length : -1, length);
         }
 
         /// <summary>
@@ -170,6 +227,8 @@ namespace AdventOfCode2022.Days
         {
             private readonly T[] _array;
             private int _ind = 0;
+
+            public int Index => _ind;
 
             public LazyQueue(T[] array)
             {
