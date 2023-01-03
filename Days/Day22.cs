@@ -11,28 +11,38 @@ namespace AdventOfCode2022.Days
 
         protected override void Part1(MapWithPassword input)
         {
-            int x = 0;
-            for (int i = 0; i < input.Map.GetLength(1); i++)
-                if (input.Map[0, i] == '.')
-                {
-                    x = i;
-                    break;
-                }
-            var y = 0;
-            var (pos, facing) = Move(input.Map, (y,x), Facing.Up, new TurnInfo(TurnType.Right, input.InitialMove));
+            var start = FindStart(input.Map);
+            var (pos, facing) = Move(input.Map, start, Facing.Up, new TurnInfo(TurnType.Right, input.InitialMove));
             foreach (var m in input.Moves)
                 (pos, facing) = Move(input.Map, pos, facing, m);
-            var pass = 1000 * (pos.Item1+1) + 4 * (pos.Item2+1) + (int)facing;
+            var pass = 1000 * (pos.Item1 + 1) + 4 * (pos.Item2 + 1) + (int)facing;
             Console.WriteLine(pass);
         }
 
         protected override void Part2(MapWithPassword input)
         {
-            int count = input.Map.Cast<char>().Count(c => c != ' ');
-            var edgeLength = (int)Math.Sqrt(count / 6);
+            //BuildCube(input.Map);
+            var start = FindStart(input.Map);
+            var (pos, facing) = Move2(input.Map, start, Facing.Up, new TurnInfo(TurnType.Right, input.InitialMove));
+            foreach (var m in input.Moves)
+                (pos, facing) = Move2(input.Map, pos, facing, m);
+            var pass = 1000 * (pos.Item1 + 1) + 4 * (pos.Item2 + 1) + (int)facing;
+            Console.WriteLine(pass);
         }
 
-        private enum Facing
+        private static (int, int) FindStart(char[,] map)
+        {
+            int x = 0;
+            for (int i = 0; i < map.GetLength(1); i++)
+                if (map[0, i] == '.')
+                {
+                    x = i;
+                    break;
+                }
+            return (0, x);
+        }
+
+        public enum Facing
         {
             Right = 0,
             Down = 1,
@@ -65,7 +75,7 @@ namespace AdventOfCode2022.Days
             };
         }
 
-        private static (int,int) CoerceIndexes((int,int) pos, char[,] map)
+        private static (int, int) CoerceIndexes((int, int) pos, char[,] map)
         {
             var (y, x) = pos;
             if (x < 0) x = map.GetLength(1) - 1;
@@ -92,5 +102,32 @@ namespace AdventOfCode2022.Days
                 pos = SingleMove(pos, facing, map);
             return (pos, facing);
         }
+
+        private static ((int, int), Facing) Move2(char[,] map, (int, int) pos, Facing facing, TurnInfo turnInfo)
+        {
+            facing = Turn(facing, turnInfo.Turn);
+            for (int step = 0; step < turnInfo.Move; step++)
+                pos = SingleMove2(pos, facing, map);
+            return (pos, facing);
+        }
+
+        private static (int, int) SingleMove2((int, int) pos, Facing facing, char[,] map)
+        {
+            //TODO: implement
+            return pos;
+        }
+
+            //Example 2
+            // . A B
+            // . C .
+            // D E .
+            // F . .
+            //Example 1
+            //. . A .
+            //B C D .
+            //. . E F
+
+        //1 - 6, 2 - 5, 3 - 4
+        
     }
 }
