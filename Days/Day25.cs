@@ -1,5 +1,4 @@
 ﻿using AdventOfCode2022.Input;
-using System.Text;
 
 namespace AdventOfCode2022.Days
 {
@@ -17,7 +16,7 @@ namespace AdventOfCode2022.Days
 
         protected override void Part2(string[] input)
         {
-            //Console.WriteLine("AOC 2022 done");
+            Console.WriteLine("AOC 2022 done");
         }
 
         public static long ToDecimal(string number)
